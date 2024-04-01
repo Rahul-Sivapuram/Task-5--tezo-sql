@@ -1,0 +1,42 @@
+[
+  {
+    "Id": 1,
+    "Name": "UIUX DESIGNER",
+    "DepartmentId": 2
+  },
+  {
+    "Id": 2,  
+    "Name": "FULL STACK DEVELOPER",
+    "DepartmentId": 1
+  },
+  {
+    "Id": 3,
+    "Name": "BACKEND DEVELOPER",
+    "DepartmentId": 3
+  },
+  {
+    "Id": 4,
+    "Name": "ASSISTANT BACKEND DEVELOPER",
+    "DepartmentId": 3
+  },
+  {
+    "Id": 5,
+    "Name": "FRONT END DEVELOPER",
+    "DepartmentId": 2
+  },
+  {
+    "Id": 6,
+    "Name": "CUSTOMER SERVICE MANAGER",
+    "DepartmentId": 3
+  },
+  {
+    "Id": 7,
+    "Name": "CUSTOMER SUPPORT",
+    "DepartmentId": 3
+  },
+  {
+    "Id": 8,
+    "Name": "SOLUTION ARCHITECT",
+    "DepartmentId": 3
+  }
+]

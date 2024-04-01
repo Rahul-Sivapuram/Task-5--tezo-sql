@@ -1,0 +1,14 @@
+[
+    {
+        "Id":1,
+        "Name":"AMAZON"
+    },
+    {
+        "Id":2,
+        "Name":"MYNTRA"
+    },
+    {
+        "Id":3,
+        "Name":"CISCO"
+    }
+]
