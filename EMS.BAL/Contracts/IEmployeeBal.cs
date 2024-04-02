@@ -7,9 +7,9 @@ namespace EMS.BAL;
 
 public interface IEmployeeBal
 {
-    bool Add(Employee employee);
-    bool Delete(string employeeNumber);
-    bool Update(string employeeNumber, Employee employee);
+    int Add(Employee employee);
+    int Delete(string employeeNumber);
+    int Update(string employeeNumber, Employee employee);
     List<EmployeeDetail> Filter(EmployeeFilter employee);
     List<EmployeeDetail> Get(string? employeeNumber);
 }

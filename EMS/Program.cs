@@ -2,7 +2,6 @@
 using CommandLine;
 using CommandLine.Text;
 using Microsoft.Extensions.Configuration;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using EMS.Common;
 using EMS.BAL;
@@ -30,24 +29,21 @@ public static class Program
     private static IEmployeeBal _employeeBal;
     private static IRoleDal _roleDal;
     private static IRoleBal _roleBal;
-    private static string _basePath;
     private static IDropDownBal _dropDownBal;
     private static IDropDownDal _dropDownDal;
-    private static JsonHelper _jsonHelper;
     private static string connectionString;
+    
     static Program()
     {
         _configuration = GetConfiguration();
         _console = new ConsoleWriter();
         connectionString = _configuration["ConnectionString"];
-        _basePath = _configuration["BasePath"];
-        _jsonHelper = new JsonHelper();
-        _employeeDal = new EmployeeDal(Path.Combine(_basePath, _configuration["EmployeesJsonPath"]), _jsonHelper, connectionString);
-        _dropDownDal = new DropDownDal(_configuration, _jsonHelper, connectionString, _employeeDal);
+        _employeeDal = new EmployeeDal(connectionString);
+        _dropDownDal = new DropDownDal(connectionString, _employeeDal);
         _dropDownBal = new DropDownBal(_dropDownDal);
-        _roleDal = new RoleDal(Path.Combine(_basePath, _configuration["JobTitleJsonPath"]), _jsonHelper,connectionString);
+        _roleDal = new RoleDal(connectionString);
         _roleBal = new RoleBal(_roleDal);
-        _employeeBal = new EmployeeBal(_employeeDal, _roleBal, _dropDownBal);
+        _employeeBal = new EmployeeBal(_employeeDal);
     }
 
     public static void Main(string[] args)
@@ -121,8 +117,8 @@ public static class Program
     private static void HandleAddOperation()
     {
         Employee employee = GetEmployeeInput();
-        bool isAddSuccessful = _employeeBal.Add(employee);
-        if (isAddSuccessful)
+        int isAddSuccessful = _employeeBal.Add(employee);
+        if (isAddSuccessful != -1)
         {
             _console.ShowSuccess(string.Format(Constants.EmployeeAddedSuccessMessage, employee.EmployeeNumber));
         }
@@ -141,7 +137,7 @@ public static class Program
             {
                 if (string.IsNullOrEmpty(options.Identifier) || item.EmployeeNumber == options.Identifier)
                 {
-                    _console.ShowInfo(string.Format(Constants.EmployeeDetailsTemplate, item.EmployeeNumber, item.FirstName, item.LastName, item.Dob, item.EmailId, item.MobileNumber, item.JoiningDate, item.LocationName, item.DeptName, item.JobName, item.ManagerName, item.ProjectName));
+                    _console.ShowInfo(string.Format(Constants.EmployeeDetailsTemplate, item.Id,item.EmployeeNumber, item.FirstName, item.LastName, item.Dob, item.EmailId, item.MobileNumber, item.JoiningDate, item.LocationName, item.DeptName, item.JobName, item.ManagerName, item.ProjectName));
                 }
             }
         }
@@ -159,7 +155,7 @@ public static class Program
         {
             foreach (var item in filteredEmployeeData)
             {
-                _console.ShowInfo(string.Format(Constants.EmployeeDetailsTemplate, item.EmployeeNumber, item.FirstName, item.LastName, item.Dob, item.EmailId, item.MobileNumber, item.JoiningDate, item.LocationName, item.DeptName, item.JobName, item.ManagerName, item.ProjectName));
+                _console.ShowInfo(string.Format(Constants.EmployeeDetailsTemplate, item.Id,item.EmployeeNumber, item.FirstName, item.LastName, item.Dob, item.EmailId, item.MobileNumber, item.JoiningDate, item.LocationName, item.DeptName, item.JobName, item.ManagerName, item.ProjectName));
             }
         }
         else
@@ -170,8 +166,8 @@ public static class Program
 
     private static void HandleDeleteOperation(Options options)
     {
-        bool res = _employeeBal.Delete(options.Identifier);
-        if (res)
+        int res = _employeeBal.Delete(options.Identifier);
+        if (res != -1)
         {
             _console.ShowSuccess(Constants.EmployeeDeletedSuccessMessage);
         }
@@ -184,8 +180,8 @@ public static class Program
     private static void HandleUpdateOperation(Options options)
     {
         Employee employeeToUpdate = GetEmployeeInput();
-        bool isUpdated = _employeeBal.Update(options.Identifier, employeeToUpdate);
-        if (isUpdated)
+        int isUpdated = _employeeBal.Update(options.Identifier, employeeToUpdate);
+        if (isUpdated != -1)
         {
             _console.ShowSuccess(string.Format(Constants.EmployeeUpdatedSuccessMessage, options.Identifier));
         }
@@ -263,13 +259,13 @@ public static class Program
         Console.WriteLine("\nAre you  a Manager? Y/N");
         string isManager = Console.ReadLine();
         employee.IsManager = isManager.Equals("Y", StringComparison.OrdinalIgnoreCase) ? true : false;
-        List<Employee> managersList = _dropDownBal.GetManagerOptions();
+        List<DropDown> managersList = _dropDownBal.GetManagerOptions();
         if (!employee.IsManager)
         {
             _console.ShowInfo("\nOptions");
             foreach (var item in managersList)
             {
-                _console.ShowInfo(item.FirstName + " " + item.LastName);
+                _console.ShowInfo(item.Name);
             }
             employee.ManagerId = _dropDownBal.GetManagerId(ReadInput("Manager"));
         }

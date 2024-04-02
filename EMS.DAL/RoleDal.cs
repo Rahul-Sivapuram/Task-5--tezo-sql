@@ -8,70 +8,78 @@ namespace EMS.DAL;
 
 public class RoleDal : IRoleDal
 {
-    private readonly string _filePath;
-    private readonly JsonHelper _jsonHelper;
     private readonly string _connectionString;
 
-    public RoleDal(string path, JsonHelper jsonHelperObject, string connectionString)
+    public RoleDal(string connectionString)
     {
-        _filePath = path;
-        _jsonHelper = jsonHelperObject;
         _connectionString = connectionString;
     }
 
     public List<Role> GetAll()
     {
-        // string jsonData = File.ReadAllText(_filePath);
-        // List<Role> roles = _jsonHelper.Deserialize<List<Role>>(jsonData);
-        // return roles;
         List<Role> roles = new List<Role>();
-        using (SqlConnection connection = new SqlConnection(_connectionString))
+        SqlConnection connection = new SqlConnection(_connectionString);
+        try
         {
-            connection.Open();
-            string sqlSelect = @"select * from Role;";
-            using (SqlCommand command = new SqlCommand(sqlSelect, connection))
+            using (connection)
             {
-                using (SqlDataReader reader = command.ExecuteReader())
+                connection.Open();
+                string sqlSelect = @"select * from Role;";
+                using (SqlCommand command = new SqlCommand(sqlSelect, connection))
                 {
-                    while (reader.Read())
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        Role role = new Role();
-                        role.Id = reader.GetInt32(0);
-                        role.Name = reader.GetString(1);
-                        role.DepartmentId = reader.GetInt32(2);
-                        roles.Add(role);
+                        while (reader.Read())
+                        {
+                            Role role = new Role();
+                            role.Id = reader.GetInt32(0);
+                            role.Name = reader.GetString(1);
+                            role.DepartmentId = reader.GetInt32(2);
+                            roles.Add(role);
+                        }
                     }
                 }
             }
         }
+        catch (Exception e)
+        {
+            throw;
+        }
+        finally
+        {
+            connection.Close();
+        }
         return roles;
     }
 
-    public bool Insert(Role role)
+    public int Insert(Role role)
     {
-        // List<Role> roles = GetAll();
-        // roles.Add(role);
-        // _jsonHelper.Save(_filePath, roles);
-        // return true;
         string sqlSelect = @"INSERT INTO Role(Name, DepartmentId) VALUES 
         (@Name, @DepartmentId);";
-        using (SqlConnection connection = new SqlConnection(_connectionString))
+        SqlConnection connection = new SqlConnection(_connectionString);
+        try
         {
-            connection.Open();
-            using (SqlCommand command = new SqlCommand(sqlSelect, connection))
+            using (connection)
             {
-                command.Parameters.AddWithValue("@Name", role.Name);
-                command.Parameters.AddWithValue("@DepartmentId", role.DepartmentId);
-                int rowsAffected = command.ExecuteNonQuery();
-                if (rowsAffected > 0)
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sqlSelect, connection))
                 {
-                    return true;
-                }
-                else
-                {
-                    return false;
+                    command.Parameters.AddWithValue("@Name", role.Name);
+                    command.Parameters.AddWithValue("@DepartmentId", role.DepartmentId);
+                    int rowsAffected = command.ExecuteNonQuery();
+                    int insertedId = Convert.ToInt32(command.ExecuteScalar());
+                    return insertedId;
                 }
             }
+        }
+        catch (System.Exception)
+        {
+            throw;
+            return -1;
+        }
+        finally
+        {
+            connection.Close();
         }
     }
 

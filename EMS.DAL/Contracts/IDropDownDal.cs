@@ -8,6 +8,6 @@ public interface IDropDownDal
 {
     List<DropDown> GetLocations();
     List<DropDown> GetDepartments();
-    List<Employee> GetManagers();
+    List<DropDown> GetManagers();
     List<DropDown> GetProjects();
 }

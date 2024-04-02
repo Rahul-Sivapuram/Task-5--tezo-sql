@@ -13,7 +13,7 @@ public interface IDropDownBal
     int GetDepartmentId(string departmentName);
     DropDown GetLocationByName(string userInput);
     DropDown GetDepartmentByName(string userInput);
-    Employee GetManagerByName(string userInput);
+    DropDown GetManagerByName(string userInput);
     DropDown GetProjectByName(string userInput);
     string GetNameByLocationId(int id);
     string GetNameByDepartmentId(int id);
@@ -21,6 +21,6 @@ public interface IDropDownBal
     string GetNameByProjectId(int id);
     List<DropDown> GetDepartmentOptions();
     List<DropDown> GetLocationOptions();
-    List<Employee> GetManagerOptions();
+    List<DropDown> GetManagerOptions();
     List<DropDown> GetProjectOptions();
 }

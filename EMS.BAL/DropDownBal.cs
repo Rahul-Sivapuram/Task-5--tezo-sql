@@ -25,7 +25,7 @@ public class DropDownBal : IDropDownBal
 
     public int GetManagerId(string managerName)
     {
-        var item = _dropDownDal.GetManagers().FirstOrDefault(i => string.Equals(i.FirstName + " " + i.LastName, managerName, StringComparison.OrdinalIgnoreCase));
+        var item = _dropDownDal.GetManagers().FirstOrDefault(i => string.Equals(i.Name, managerName, StringComparison.OrdinalIgnoreCase));
         return item?.Id ?? -1;
     }
 
@@ -61,10 +61,10 @@ public class DropDownBal : IDropDownBal
         return GetItemByName(data, departmentName);
     }
 
-    public Employee GetManagerByName(string managerName)
+    public DropDown GetManagerByName(string managerName)
     {
-        List<Employee> data = _dropDownDal.GetManagers();
-        Employee item = data.FirstOrDefault(item => managerName.Equals(item.FirstName + " " + item.LastName, StringComparison.OrdinalIgnoreCase));
+        List<DropDown> data = _dropDownDal.GetManagers();
+        DropDown item = data.FirstOrDefault(item => managerName.Equals(item.Name, StringComparison.OrdinalIgnoreCase));
         return item;
     }
 
@@ -101,7 +101,7 @@ public class DropDownBal : IDropDownBal
     public string GetNameByManagerId(int id)
     {   
         var manager = _dropDownDal.GetManagers().FirstOrDefault(x => x.Id == id);
-        return manager != null ? manager.FirstName + " " + manager.LastName : null;
+        return manager != null ? manager.Name : null;
     }
 
     public string GetNameByProjectId(int id)
@@ -120,7 +120,7 @@ public class DropDownBal : IDropDownBal
         return _dropDownDal.GetLocations();
     }
 
-    public List<Employee> GetManagerOptions()
+    public List<DropDown> GetManagerOptions()
     {   
         return _dropDownDal.GetManagers();
     }

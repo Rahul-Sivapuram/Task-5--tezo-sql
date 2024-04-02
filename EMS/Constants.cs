@@ -7,7 +7,7 @@ namespace EMS.Common;
 
 public class Constants
 {
-    public const string EmployeeDetailsTemplate ="EmpNumber: {0}\n" + "EmpFirstName: {1}\n" + "EmpLastName: {2}\n" + "EmpDob: {3}\n" + "EmpEmailId: {4}\n" + "EmpMobileNumber: {5}\n" + "EmpJoiningDate: {6}\n" + "EmpLocation: {7}\n" + "EmpJobTitle: {8}\n" + "EmpDepartment: {9}\n" + "EmpManager: {10}\n" + "EmpProject: {11}\n";
+    public const string EmployeeDetailsTemplate ="EmpId: {0}\n"+"EmpNumber: {1}\n" + "EmpFirstName: {2}\n" + "EmpLastName: {3}\n" + "EmpDob: {4}\n" + "EmpEmailId: {5}\n" + "EmpMobileNumber: {6}\n" + "EmpJoiningDate: {7}\n" + "EmpLocation: {8}\n" + "EmpJobTitle: {9}\n" + "EmpDepartment: {10}\n" + "EmpManager: {11}\n" + "EmpProject: {12}\n";
     public const string EmployeeDeletedSuccessMessage = "Employee deleted successfully.";
     public const string DeletionFailedMessage = "Deletion Failed.";
     public const string EmployeeNotFoundMessage = "Employee not found.";

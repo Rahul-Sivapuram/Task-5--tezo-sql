@@ -8,5 +8,5 @@ namespace EMS.DAL;
 public interface IRoleDal
 {
     List<Role> GetAll();
-    bool Insert(Role role);
+    int Insert(Role role);
 }
