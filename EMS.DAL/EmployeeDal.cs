@@ -28,7 +28,7 @@ public class EmployeeDal : IEmployeeDal
                 string sqlSelect = @"SELECT 
                 emp.Id, emp.Uid, emp.FirstName, emp.LastName, emp.Dob as DOB, emp.EmailId, emp.MobileNumber, emp.JoiningDate, 
                 Location.Name as Location, 
-                Role.Name as Role, 
+                Roles.Name as Role, 
                 Department.Name as Department,
                 CONCAT(manager.FirstName, ' ', manager.LastName) as Manager,
                 Project.Name as Project  
@@ -36,7 +36,7 @@ public class EmployeeDal : IEmployeeDal
                     Employee as emp
                 LEFT JOIN Employee as manager ON emp.ManagerId = manager.Id
                 JOIN Location ON emp.LocationId = Location.Id
-                JOIN Role ON emp.RoleId = Role.Id
+                JOIN Roles ON emp.RoleId = Roles.Id
                 JOIN Department ON emp.DepartmentId = Department.Id
                 JOIN Project ON emp.ProjectId = Project.Id;";
                 using (SqlCommand command = new SqlCommand(sqlSelect, conn))
@@ -104,7 +104,6 @@ public class EmployeeDal : IEmployeeDal
             connection.Close();
         }
     }
-
 
     public int Update(string employeeNumber, Employee employee)
     {

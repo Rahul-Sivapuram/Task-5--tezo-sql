@@ -24,7 +24,7 @@ public class RoleDal : IRoleDal
             using (connection)
             {
                 connection.Open();
-                string sqlSelect = @"select * from Role;";
+                string sqlSelect = @"select * from Roles;";
                 using (SqlCommand command = new SqlCommand(sqlSelect, connection))
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
@@ -54,7 +54,7 @@ public class RoleDal : IRoleDal
 
     public int Insert(Role role)
     {
-        string sqlSelect = @"INSERT INTO Role(Name, DepartmentId) VALUES 
+        string sqlSelect = @"INSERT INTO Roles(Name, DepartmentId) VALUES 
         (@Name, @DepartmentId);";
         SqlConnection connection = new SqlConnection(_connectionString);
         try
